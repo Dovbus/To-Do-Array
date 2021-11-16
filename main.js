@@ -5,6 +5,7 @@ const priorityHigh = "high";
 const priorityLow = "low";
 const priorities = ["high", "low"];
 const statuses = ["To Do", "In Progress", "Done"];
+let idCounter = 4;
 
 const list = [
 	{
@@ -41,13 +42,15 @@ function changeStatus(name, status = statusToDo) {
 }
 
 function addTask(name, status = statusToDo, priority = priorityLow) {
+
 	if (priorities.includes(priority) && statuses.includes(status)) {
 		list.push({
-			id: list.length + 1,
+			id: idCounter,
 			name: name,
 			status: status,
 			priority: priority,
 		});
+		idCounter++;
 	} else {
 		console.log(`${priority} is unknown priority. Please, try: high, low.`);
 	}
@@ -58,11 +61,9 @@ function deleteTask(name) {
 	const deleteIndex = list.findIndex(function (item) {
 		return item.name === name;
 	});
+
 	if (deleteIndex !== -1) {
 		list.splice(deleteIndex, 1);
-		list.map(function (item, index) {
-			item.id = index + 1;
-		});
 	} else {
 		console.log("The task cannot be deleted. Please enter an existing task.");
 	}
@@ -105,5 +106,7 @@ deleteTask("make a bed");
 deleteTask("buy milk");
 deleteTask("cook dinner");
 
+
 showBy("status");
 showBy("priority");
+console.log(list);
