@@ -30,11 +30,9 @@ const list = [
 
 function changeStatus(name, status = statusToDo) {
 	if (statuses.includes(status)) {
-		const changeIndex = list.findIndex(function (item) {
-			return item.name === name;
-		});
-		if (changeIndex !== -1) {
-			list[changeIndex].status = status;
+		const taskIndex = getTaskIndex(name);
+		if (taskIndex !== -1) {
+			list[taskIndex].status = status;
 		}
 	} else {
 		console.log(`${status} is unknown status. Please, try: To Do, In Progress, Done`);
@@ -45,12 +43,12 @@ function addTask(name, status = statusToDo, priority = priorityLow) {
 
 	if (priorities.includes(priority) && statuses.includes(status)) {
 		list.push({
-			id: idCounter,
+			id: idCounter++,
 			name: name,
 			status: status,
 			priority: priority,
 		});
-		idCounter++;
+
 	} else {
 		console.log(`${priority} is unknown priority. Please, try: high, low.`);
 	}
@@ -58,9 +56,7 @@ function addTask(name, status = statusToDo, priority = priorityLow) {
 }
 
 function deleteTask(name) {
-	const deleteIndex = list.findIndex(function (item) {
-		return item.name === name;
-	});
+	const deleteIndex = getTaskIndex(name);
 
 	if (deleteIndex !== -1) {
 		list.splice(deleteIndex, 1);
@@ -84,6 +80,10 @@ function showBy(key) {
 	}
 }
 
+function getTaskIndex(name) {
+	return list.findIndex(item => item.name === name)
+}
+
 function filterTask(key, component) {
 	let filtered = list.filter(function (item) {
 		if (item[key] === component) {
@@ -102,10 +102,10 @@ addTask("read a book", "In Progress", "medium");
 addTask("cook dinner");
 changeStatus("create a post", "Done");
 changeStatus("cook dinner", "sometimes");
+
 deleteTask("make a bed");
 deleteTask("buy milk");
 deleteTask("cook dinner");
-
 
 showBy("status");
 showBy("priority");
